@@ -7,10 +7,9 @@ class OrgTree
 public:
 	OrgTree();
 	~OrgTree();
+
 	void addRoot(std::string title, std::string name);
 	unsigned int getSize();
-	void deleteHelper(TREENODEPTR);
-	
 	TREENODEPTR getRoot();
 	
 	TREENODEPTR leftmostChild(TREENODEPTR node);
@@ -27,5 +26,11 @@ public:
 private:
 	TREENODEPTR root;
 	unsigned int size;
+
+	void deleteHelper(TREENODEPTR);
+	TREENODEPTR findHelper(TREENODEPTR, std::string);
+	TREENODEPTR rightmostSiblingFinder(TREENODEPTR);
+	void printHelper(TREENODEPTR);
+
 };
 

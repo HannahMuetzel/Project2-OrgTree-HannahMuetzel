@@ -7,7 +7,7 @@
 #define TREENODEPTR TreeNode*
 #define TREENULLPTR NULL
 
-void testfuc() {
+void testfucn() {
 	//Test making an OrgTree
 
 	//OrgTree* testTree = new OrgTree();
@@ -17,43 +17,53 @@ void testfuc() {
 	//std::cout << testNode->getName() << testNode->getTitle() << testNode->getLC() << testNode->getRS() << testNode->getPar() << std::endl;
 
 	//Add a root
-	testTree.addRoot("Test title", "Test name");
+	testTree.addRoot("Things: ", "1");
 	//Get root
 	TreeNode* currRoot = testTree.getRoot();
 	//std::cout << currRoot->getName() << currRoot->getTitle() << currRoot->getLC() << currRoot->getRS() << currRoot->getPar() << std::endl;
 	//Add root when there already exists a root
+	std::cout << testTree.getSize() << std::endl;
 
-	testTree.addRoot("Replace title", "Replace name");
+	testTree.addRoot("Things:: ", "2");
 	currRoot = testTree.getRoot();
+	std::cout << testTree.getSize() << std::endl;
+
+	testTree.addRoot("Things::: ", "3");
+	std::cout << testTree.getSize() << std::endl;
+
 	//std::cout << currRoot->getName() << currRoot->getTitle() << currRoot->getLC() << currRoot->getRS() << currRoot->getPar() << std::endl;
 	//delete testTree;
 }
 
 int main()
 {
-	for (int i = 0; i < 100000; i++) {
-		testfuc();
+	for (int i = 0; i < 1; i++) {
+		//testfucn();
 	}
-	//Test making an OrgTree
 
-	//OrgTree* testTree = new OrgTree();
+	OrgTree test;
+	test.addRoot("Test Root Title", "Root");
+	test.hire(test.getRoot(), "Fire me!", "I'm a horrible employee!");
+	test.hire(test.find("Fire me!"), "RS of Fire me", "RS 1");
+	test.hire(test.find("Fire me!"), "LC of Fire me", "LC 1");
 	
-	//Make a TreeNode
-	//TreeNode* testNode = new TreeNode("Tom Root", "Root-Man", TREENULLPTR, TREENULLPTR, TREENULLPTR);
-	//std::cout << testNode->getName() << testNode->getTitle() << testNode->getLC() << testNode->getRS() << testNode->getPar() << std::endl;
+	//std::cout << test.find("Fire me!") << std::endl;
+	//std::cout << test.find("Test Root Title") << std::endl;
+	//std::cout << test.find("I will not be found") << std::endl;
+	
+	test.printSubTree(test.getRoot());
+
 	/*
-	//Add a root
-	testTree->addRoot("Test title", "Test name");
-	//Get root
-	TreeNode* currRoot = testTree->getRoot();
-	std::cout << currRoot->getName() << currRoot->getTitle() << currRoot->getLC() << currRoot->getRS() << currRoot->getPar() << std::endl;
-	//Add root when there already exists a root
-	
-	testTree->addRoot("Replace title", "Replace name");
-	currRoot = testTree->getRoot();
-	std::cout << currRoot->getName() << currRoot->getTitle() << currRoot->getLC() << currRoot->getRS() << currRoot->getPar() << std::endl;
-
+	for (int i = 0; i < 10; i++) {
+		test.hire(test.getRoot(), "Title", "Name");
+		std::cout << test.getSize() << std::endl;
+		test.printSubTree(test.getRoot());
+//		bool isFired = test.fire("Fire me!");
+	//	std::cout << "Did we fire? " << isFired << std::endl;
+		std::cout << test.getSize() << std::endl;
+	}
 	*/
+
 	system("pause");
     return 0;
 }
