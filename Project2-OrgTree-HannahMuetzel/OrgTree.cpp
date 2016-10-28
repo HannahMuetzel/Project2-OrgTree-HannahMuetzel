@@ -92,24 +92,44 @@ bool OrgTree::fire(std::string formerTitle)
 		return false;
 	}
 
-	if (fireThem->getLC() != TREENULLPTR) {
-		while ((fireThem->getLC())->getRS() != TREENULLPTR) {
-			rightmostSiblingFinder(fireThem->getLC())->par = fireThem->getPar();
+	size--;
+
+	//Handle if fireThem is a right sibling to another node
+	TREENODEPTR travNode = fireThem->getPar()->getLC();
+	while (travNode != fireThem) {
+		if (travNode->getRS() == fireThem) {
+			travNode = travNode->getRS();
+			travNode->rs = fireThem->getRS();
 		}
-		(fireThem->getLC())->par = fireThem->getPar();
-		size--;
-		return true;
+		else {
+			travNode = travNode->getRS();
+		}
 	}
+
+	//Handle if fireThem is a LC
+	if (fireThem->getPar()->getLC() == fireThem) {
+		//Check if fireThem has a RS to become new LC of parent
+		if (fireThem->getRS() != TREENULLPTR) {
+			fireThem->getPar()->lc = fireThem->getRS();
+		} else {
+		//else, set LC of parent to NULL
+			fireThem->getPar()->lc = TREENULLPTR;
+		}
+	}
+
+	//Handle if fireThem has children
+	while (fireThem->getLC() != TREENULLPTR) {
+		fireThem->getLC()->par = fireThem->getPar();
+		fireThem->lc = fireThem->getLC()->getRS();
+	}
+
+	fireThem->par = TREENULLPTR;
+	fireThem->lc = TREENULLPTR;
+	fireThem->rs = TREENULLPTR;
 
 	delete fireThem;
 
-	return false;
-	//find(formerTitle)
-	//delete that guy by setting his children's parents to his parent
-	//change their rs if needed
-	//remove him from the tree by deleting his node
-
-	//size --- -!!! !!
+	return true;
 }
 
 

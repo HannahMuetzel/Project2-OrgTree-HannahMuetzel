@@ -18,6 +18,9 @@ int main()
 	test.addRoot("Test Root Title", "Root");
 	expSize++;
 	test.hire(test.getRoot(), "LC", "Root LC");
+	expSize++;
+	test.hire(test.getRoot(), "Fire me!", "I take fifteen breaks an hour!");
+	expSize++;
 
 	for (int i = 1; i < 10; i++) {
 		expSize++;
@@ -38,8 +41,11 @@ int main()
 		expSize++;
 	}
 
-	test.hire(test.getRoot(), "Fire me!", "I take fifteen breaks an hour!");
-	expSize++;
+	
+
+	test.printSubTree(test.getRoot());
+
+	std::cout << "After firing the world's worst employee: " << std::endl;
 
 	test.fire("Fire me!");
 	expSize--;
