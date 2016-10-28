@@ -36,7 +36,6 @@ TREENODEPTR OrgTree::getRoot()
 	return root;
 }
 
-//TODO: test this
 TREENODEPTR OrgTree::leftmostChild(TREENODEPTR node)
 {
 	if (node->getLC() == TREENULLPTR) {
@@ -47,18 +46,16 @@ TREENODEPTR OrgTree::leftmostChild(TREENODEPTR node)
 	}
 }
 
-//TODO: test this
 TREENODEPTR OrgTree::rightSibling(TREENODEPTR node)
 {
 	if (node->getRS() == TREENULLPTR) {
 		return TREENULLPTR;
 	}
 	else {
-		return node->getLC();
+		return node->getRS();
 	}
 }
 
-//TODO: test this
 void OrgTree::hire(TREENODEPTR ptr, std::string newTitle, std::string newName)
 {
 	if (ptr->getLC() == TREENULLPTR) {
@@ -66,15 +63,14 @@ void OrgTree::hire(TREENODEPTR ptr, std::string newTitle, std::string newName)
 		ptr->lc = newEmployee;
 	}
 	else {
-		TREENODEPTR rightmostSibling = rightmostSiblingFinder(ptr);
-		TreeNode* newEmployee = new TreeNode(newName, newTitle, TREENULLPTR, rightmostSibling, ptr);
+		TREENODEPTR rightmostSibling = rightmostSiblingFinder(ptr->getLC());
+		TreeNode* newEmployee = new TreeNode(newName, newTitle, TREENULLPTR, TREENULLPTR, ptr);
 		rightmostSibling->rs = newEmployee;
 	}
 	
 	size++;
 }
 
-//TODO: test this
 TREENODEPTR OrgTree::find(std::string title)
 {
 	TREENODEPTR isFound = findHelper(root, title);
@@ -117,30 +113,38 @@ bool OrgTree::fire(std::string formerTitle)
 }
 
 
-void OrgTree::printSubTree(TREENODEPTR subTreeRoot)
+void OrgTree::printSubTree(TREENODEPTR subTreeRoot) 
 {
-	printHelper(subTreeRoot);
-	//make this recursive somehow?
-	//if there's a root, print it, then set the lc of root to currRoot
-	//err no, print all the rs of that lc first, then set the lc to currRoot
-	//print currRoot, rinse and repeat
-	//except don't do this because it messes up the order of the children
-	//does that even matter?
-	//idk lol
-	//how do i print a tab omg
+	TREENODEPTR currNode = subTreeRoot;
+	int tabs = 0;
+	while (true) {
+		for (int i = 0; i < tabs; i++) {
+			std::cout << "\t";
+		}
+		//Print the current node
+		std::cout << currNode->getTitle() << ": " << currNode->getName() << std::endl;
 
-	//currNode = root (start here)
-	//print currNode
-	//call printHelper(currNode->LC) if currNode->LC exists
-	//print tab
-	//print currNode->LC
-	//check if currNode->LC->RS exists
-	//if it does, print that with an "and" and blah blah
-	//go through all children of currNode
-	//if child of currNode has a child, print that child, move down, etc, etc
-	//print some dang tabs
-	//inorder traversal?? with tab printing?
-
+		//Check if current node has a child
+		if (currNode->getLC() != TREENULLPTR) {
+			tabs++;
+			currNode = currNode->getLC();
+		}
+		//Check if current node has a right sibling
+		else if (currNode->getRS() != TREENULLPTR) {
+			currNode = currNode->getRS();
+		}
+		//Check if we have traversed the entire tree
+		else if (currNode != subTreeRoot) {
+			currNode = currNode->getPar()->getRS();
+			if (currNode == TREENULLPTR) {
+				break;
+			}
+			tabs--;
+		}
+		else {
+			break;
+		}
+	}
 }
 
 /*
@@ -166,7 +170,6 @@ void OrgTree::deleteHelper(TREENODEPTR currNode) {
 	delete currNode;
 }
 
-//TODO: test this
 TREENODEPTR OrgTree::findHelper(TREENODEPTR currNode, std::string findTitle) {
 	TREENODEPTR travNode = currNode;
 	if (currNode->getLC() != TREENULLPTR) {
@@ -176,7 +179,7 @@ TREENODEPTR OrgTree::findHelper(TREENODEPTR currNode, std::string findTitle) {
 		}
 	}
 	if (currNode->getRS() != TREENULLPTR) {
-		currNode = findHelper(currNode->getRS(), findTitle);
+		travNode = findHelper(currNode->getRS(), findTitle);
 		if (travNode != TREENULLPTR) {
 			currNode = travNode;
 		}
@@ -190,25 +193,10 @@ TREENODEPTR OrgTree::findHelper(TREENODEPTR currNode, std::string findTitle) {
 	}
 }
 
-//TODO: test this
 TREENODEPTR OrgTree::rightmostSiblingFinder(TREENODEPTR currNode) {
-	if (currNode->getRS() != TREENULLPTR) {
-		rightmostSiblingFinder(currNode->getRS());
+	if (currNode->getRS() == TREENULLPTR) {
+		return currNode;
+	} else {
+		return rightmostSiblingFinder(currNode->getRS());
 	}
-	return currNode;
-}
-
-//TODO: make this not break the program lol
-void OrgTree::printHelper(TREENODEPTR currNode) {
-	std::cout << currNode->getTitle() << ": " << currNode->getName() << std::endl;
-	if (currNode->getLC() != TREENULLPTR) {
-		std::cout << "     ";
-		printHelper(currNode->getLC());
-		//print a tab here probs?
-	}
-	if (currNode->getRS() != TREENULLPTR) {
-		std::cout << " and ";
-		printHelper(currNode->getRS());
-	}
-	std::cout << std::endl;
 }

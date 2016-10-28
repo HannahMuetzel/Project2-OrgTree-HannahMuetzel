@@ -7,64 +7,53 @@
 #define TREENODEPTR TreeNode*
 #define TREENULLPTR NULL
 
-void testfucn() {
-	//Test making an OrgTree
-
-	//OrgTree* testTree = new OrgTree();
-	OrgTree testTree;
-	//Make a TreeNode
-	//TreeNode* testNode = new TreeNode("Tom Root", "Root-Man", TREENULLPTR, TREENULLPTR, TREENULLPTR);
-	//std::cout << testNode->getName() << testNode->getTitle() << testNode->getLC() << testNode->getRS() << testNode->getPar() << std::endl;
-
-	//Add a root
-	testTree.addRoot("Things: ", "1");
-	//Get root
-	TreeNode* currRoot = testTree.getRoot();
-	//std::cout << currRoot->getName() << currRoot->getTitle() << currRoot->getLC() << currRoot->getRS() << currRoot->getPar() << std::endl;
-	//Add root when there already exists a root
-	std::cout << testTree.getSize() << std::endl;
-
-	testTree.addRoot("Things:: ", "2");
-	currRoot = testTree.getRoot();
-	std::cout << testTree.getSize() << std::endl;
-
-	testTree.addRoot("Things::: ", "3");
-	std::cout << testTree.getSize() << std::endl;
-
-	//std::cout << currRoot->getName() << currRoot->getTitle() << currRoot->getLC() << currRoot->getRS() << currRoot->getPar() << std::endl;
-	//delete testTree;
-}
-
 int main()
 {
-	for (int i = 0; i < 1; i++) {
-		//testfucn();
-	}
+	OrgTree testDaRoot;
+	testDaRoot.addRoot("TEST", "root!!");
+	testDaRoot.printSubTree(testDaRoot.getRoot());
 
+	int expSize = 0;
 	OrgTree test;
 	test.addRoot("Test Root Title", "Root");
-	test.hire(test.getRoot(), "Fire me!", "I'm a horrible employee!");
-	test.hire(test.find("Fire me!"), "RS of Fire me", "RS 1");
-	test.hire(test.find("Fire me!"), "LC of Fire me", "LC 1");
-	
-	//std::cout << test.find("Fire me!") << std::endl;
-	//std::cout << test.find("Test Root Title") << std::endl;
-	//std::cout << test.find("I will not be found") << std::endl;
-	
+	expSize++;
+	test.hire(test.getRoot(), "LC", "Root LC");
+
+	for (int i = 1; i < 10; i++) {
+		expSize++;
+		test.hire(test.getRoot(), "RS" + std::to_string(i), "Root LC RS" + std::to_string(i));
+
+		//TODO: test fire omg
+
+		//test.fire("RS" + std::to_string(i));
+		//expSize--;
+	}
+
+	for (int i = 1; i < 5; i++) {
+		test.hire(test.find("RS1"), "RS1" + std::to_string(i), "Root LC RS1" + std::to_string(i));
+		expSize++;
+	}
+	for (int i = 1; i < 9; i++) {
+		test.hire(test.find("RS5"), "RS5" + std::to_string(i), "Root LC RS5" + std::to_string(i));
+		expSize++;
+	}
+
+	test.hire(test.getRoot(), "Fire me!", "I take fifteen breaks an hour!");
+	expSize++;
+
+	test.fire("Fire me!");
+	expSize--;
+
+	//std::cout << "Found Fire me?: " << test.find("Fire me!") << std::endl;
+	//std::cout << "Found root?: " << test.find("Test Root Title") << std::endl;
+	//std::cout << "Found unfindable guy?: " << test.find("I will not be found") << std::endl;
+
 	test.printSubTree(test.getRoot());
 
-	/*
-	for (int i = 0; i < 10; i++) {
-		test.hire(test.getRoot(), "Title", "Name");
-		std::cout << test.getSize() << std::endl;
-		test.printSubTree(test.getRoot());
-//		bool isFired = test.fire("Fire me!");
-	//	std::cout << "Did we fire? " << isFired << std::endl;
-		std::cout << test.getSize() << std::endl;
-	}
-	*/
+	std::cout << std::endl << "Expected size: " << expSize << std::endl;
+	std::cout << "Size: " << test.getSize() << std::endl;
 
 	system("pause");
-    return 0;
+	return 0;
 }
 

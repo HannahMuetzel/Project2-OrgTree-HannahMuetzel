@@ -30,7 +30,5 @@ private:
 	void deleteHelper(TREENODEPTR);
 	TREENODEPTR findHelper(TREENODEPTR, std::string);
 	TREENODEPTR rightmostSiblingFinder(TREENODEPTR);
-	void printHelper(TREENODEPTR);
-
 };
 

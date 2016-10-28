@@ -23,12 +23,7 @@ TreeNode::TreeNode(const std::string name_, const std::string title_, TREENODEPT
 	par = par_;
 }
 
-TreeNode::~TreeNode()
-{
-	//delete lc;
-	//delete rs;
-	//delete par;
-}
+TreeNode::~TreeNode(){}
 
 std::string TreeNode::getName() {
 	return name;
