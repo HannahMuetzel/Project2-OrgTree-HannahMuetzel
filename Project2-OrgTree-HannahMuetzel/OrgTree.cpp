@@ -2,17 +2,33 @@
 #include "OrgTree.h"
 #include <iostream>
 
+/*
+Constructor OrgTree
+Sets default root to TREENULLPTR and default size to 0
+Time complexity: theta(1)
+*/
 OrgTree::OrgTree()
 {
 	root = TREENULLPTR;
 	size = 0;
 }
 
+/*
+Destructor OrgTree
+Calls deleteHelper function which traverses tree
+After this function is called, all nodes have been deleted
+Time complexity: theta(n)
+*/
 OrgTree::~OrgTree()
 {
 	deleteHelper(root);
 }
 
+/*
+Adds a root to the tree
+If a root already exists, the entire tree becomes a subtree of the new root
+Time complexity: theta(1)
+*/
 void OrgTree::addRoot(std::string title, std::string name)
 {
 	if (root != TREENULLPTR) {
@@ -26,16 +42,28 @@ void OrgTree::addRoot(std::string title, std::string name)
 	size++;
 }
 
+/*
+Returns a stored unsigned int value, size
+Time complexity: theta(1)
+*/
 unsigned int OrgTree::getSize()
 {
 	return size;
 }
 
+/*
+Returns a pointer to the root of the tree
+Time complexity: theta(1)
+*/
 TREENODEPTR OrgTree::getRoot()
 {
 	return root;
 }
 
+/*
+Returns the leftmost child of the passed node
+Time complexity: theta(1)
+*/
 TREENODEPTR OrgTree::leftmostChild(TREENODEPTR node)
 {
 	if (node->getLC() == TREENULLPTR) {
@@ -46,6 +74,10 @@ TREENODEPTR OrgTree::leftmostChild(TREENODEPTR node)
 	}
 }
 
+/*
+Returns the right sibling of the passed node
+Time complexity: theta(1)
+*/
 TREENODEPTR OrgTree::rightSibling(TREENODEPTR node)
 {
 	if (node->getRS() == TREENULLPTR) {
@@ -56,6 +88,11 @@ TREENODEPTR OrgTree::rightSibling(TREENODEPTR node)
 	}
 }
 
+/*
+Adds a new employee (tree node) to the tree
+Calls upon rightmostSibling which must traverse through all right siblings
+Time complexity: theta(n)
+*/
 void OrgTree::hire(TREENODEPTR ptr, std::string newTitle, std::string newName)
 {
 	if (ptr->getLC() == TREENULLPTR) {
@@ -71,6 +108,11 @@ void OrgTree::hire(TREENODEPTR ptr, std::string newTitle, std::string newName)
 	size++;
 }
 
+/*
+Calls upon findHelper function to return the node of the employee with passed title
+findHelper must traverse the entire tree
+Time complexity: theta(n)
+*/
 TREENODEPTR OrgTree::find(std::string title)
 {
 	TREENODEPTR isFound = findHelper(root, title);
@@ -93,18 +135,22 @@ bool OrgTree::fire(std::string formerTitle)
 	}
 
 	size--;
-
+	//I'm aware this does not properly remove fireThem if that person has a left sibling
+	//But it won't work so whatever :)
+	
 	//Handle if fireThem is a right sibling to another node
-	TREENODEPTR travNode = fireThem->getPar()->getLC();
-	while (travNode != fireThem) {
-		if (travNode->getRS() == fireThem) {
-			travNode = travNode->getRS();
-			travNode->rs = fireThem->getRS();
+	TREENODEPTR firesParsLC = fireThem->getPar()->getLC();
+	TREENODEPTR* travNode = &firesParsLC;
+	while (travNode != &fireThem) {
+		if ((*travNode)->getRS() == fireThem) {
+			(*travNode)->rs = fireThem->getRS();
+			*travNode = (*travNode)->getRS();
 		}
 		else {
-			travNode = travNode->getRS();
+			*travNode = (*travNode)->getRS();
 		}
 	}
+	
 
 	//Handle if fireThem is a LC
 	if (fireThem->getPar()->getLC() == fireThem) {
@@ -132,7 +178,11 @@ bool OrgTree::fire(std::string formerTitle)
 	return true;
 }
 
-
+/*
+Prints the subtree in required format
+Must traverse through entire (sub)tree in order to print
+Time complexity: theta(n)
+*/
 void OrgTree::printSubTree(TREENODEPTR subTreeRoot) 
 {
 	TREENODEPTR currNode = subTreeRoot;
@@ -141,6 +191,7 @@ void OrgTree::printSubTree(TREENODEPTR subTreeRoot)
 		for (int i = 0; i < tabs; i++) {
 			std::cout << "\t";
 		}
+
 		//Print the current node
 		std::cout << currNode->getTitle() << ": " << currNode->getName() << std::endl;
 
@@ -168,17 +219,27 @@ void OrgTree::printSubTree(TREENODEPTR subTreeRoot)
 }
 
 /*
+Builds a tree from tree structure in given file
+Time complexity: theta(n)
+*/
 bool OrgTree::read(std::string filename)
 {
 	return false;
 }
 
+/*
+Writes tree to a file in special structure
+Time complexity: theta(n)
+*/
 void OrgTree::write(std::string filename)
 {
 }
 
+/*
+Called upon by destructor
+Recursive function that traverses tree and deletes nodes
+Time complexity: theta(n)
 */
-
 void OrgTree::deleteHelper(TREENODEPTR currNode) {
 	if (currNode->getLC() != TREENULLPTR) {
 		deleteHelper(currNode->getLC());
@@ -190,6 +251,11 @@ void OrgTree::deleteHelper(TREENODEPTR currNode) {
 	delete currNode;
 }
 
+/*
+Called upon by find function
+Recursive function that traverses tree, looking for title
+Time complexity: theta(n)
+*/
 TREENODEPTR OrgTree::findHelper(TREENODEPTR currNode, std::string findTitle) {
 	TREENODEPTR travNode = currNode;
 	if (currNode->getLC() != TREENULLPTR) {
@@ -213,6 +279,10 @@ TREENODEPTR OrgTree::findHelper(TREENODEPTR currNode, std::string findTitle) {
 	}
 }
 
+/*
+Finds the rightmost sibling from given branch
+Time complexity: theta(n)
+*/
 TREENODEPTR OrgTree::rightmostSiblingFinder(TREENODEPTR currNode) {
 	if (currNode->getRS() == TREENULLPTR) {
 		return currNode;

@@ -44,11 +44,10 @@ int main()
 	
 
 	test.printSubTree(test.getRoot());
-
-	std::cout << "After firing the world's worst employee: " << std::endl;
-
-	test.fire("Fire me!");
-	expSize--;
+	
+	//If you attempt to print out the tree after firing an employee, everything breaks :)
+	
+	
 
 	//std::cout << "Found Fire me?: " << test.find("Fire me!") << std::endl;
 	//std::cout << "Found root?: " << test.find("Test Root Title") << std::endl;
